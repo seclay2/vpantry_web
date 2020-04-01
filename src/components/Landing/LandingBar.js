@@ -48,6 +48,7 @@ function LandingBar(props) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [open, setOpen] = useState(false);
 
     function onChange(e) {
         //this.setState({ [e.target.name]: e.target.value });
@@ -65,6 +66,7 @@ function LandingBar(props) {
 
     function onSubmit(e) {
         e.preventDefault();
+        setOpen(true);
 
         const credentials = {
             email: email,
@@ -129,6 +131,12 @@ function LandingBar(props) {
                     </Container>
                 </Toolbar>
             </AppBar>
+            {open &&
+            <Backdrop className={classes.backdrop} open={open} >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+            }
+
         </div>
     );
 }

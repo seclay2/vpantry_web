@@ -283,6 +283,7 @@ function EnhancedTable(props) {
 
     // Set items on render
     useEffect(() => {
+        props.fetchPantryItems(props.pantry.activePantry);
         setRows(props.items);
     });
 

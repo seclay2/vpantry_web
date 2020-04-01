@@ -6,7 +6,7 @@ import AppBar from "@material-ui/core/AppBar/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import {makeStyles} from "@material-ui/core/styles";
 
-import logo from '../assets/images/green-logo.png';
+import logo from '../../assets/images/green-logo.png';
 
 // material-ui styling
 const useStyles = makeStyles((theme) => ({

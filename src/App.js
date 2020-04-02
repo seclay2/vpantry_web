@@ -5,10 +5,10 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 // Components
-import PrivateRoute from "./components/PrivateRoute";
-import Landing from './components/Landing/Landing';
-import RegisterForm from "./components/Landing/RegisterForm";
-import Dashboard from "./components/Dashboard/Dashboard";
+import PrivateRoute from "./components/private-route/PrivateRoute";
+import Landing from './components/landing/Landing';
+import RegisterForm from "./components/landing/RegisterForm";
+import Dashboard from "./components/dashboard/Dashboard";
 
 
 function App() {

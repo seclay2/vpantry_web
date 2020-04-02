@@ -1,16 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+import { logout} from "../../actions/authActions";
 
 //material-ui
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
 import {makeStyles} from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from '@material-ui/core/Tab';
 import logo from '../../assets/images/green-logo.png';
-import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+import Avatar from "@material-ui/core/Avatar";
 
 // material-ui styling
 const useStyles = makeStyles((theme) => ({
@@ -18,28 +19,36 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     appBar: {
-        position: 'static',
+        position: 'relative',
         backgroundColor: "#6FD546",
+        zIndex: 2400
     },
-    paper: {
-        width: '30%',
+    grid: {
+        alignItems: "flex-end",
+        spacing: theme.spacing(2),
+        marginLeft: theme.spacing(2)
     }
 }));
 
-export default function PlainBar() {
+function DashboardBar(props) {
     const classes = useStyles();
 
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState("MY_PANTRIES");
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        props.changeView(newValue);
+    };
+
+    const logout = () => {
+        props.logout();
     };
 
     return (
         <div className={classes.root} >
             <CssBaseline />
             <AppBar className={classes.appBar}>
-                <Grid container alignItems="flex-end" spacing={2}>
+                <Grid container className={classes.grid} >
                     <Grid item xs={6}>
                         <img src={logo} width='20%' alt="vPantry Logo"/>
                     </Grid>
@@ -52,10 +61,10 @@ export default function PlainBar() {
                                 indicatorColor="primary"
                                 textColor="primary"
                             >
-                                <Tab label="Home" />
-                                <Tab label="My Pantries" />
-                                <Tab label="My Groups" />
-                                <Tab label="My Profile" />
+                                <Tab label="My Pantries" value="MY_PANTRIES"/>
+                                <Tab label="My Groups" value="MY_GROUPS"/>
+                                <Tab label="My Profile" value="MY_PROFILE"/>
+                                <Tab label="Sign Out" onClick={logout}/>
                             </Tabs>
                         </Grid>
                     </Grid>
@@ -66,3 +75,13 @@ export default function PlainBar() {
     );
 }
 
+DashboardBar.propTypes = {
+    logout: PropTypes.func.isRequired,
+    user: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps, { logout })(DashboardBar);

@@ -1,78 +1,7 @@
-// import React, {Component} from 'react';
-// import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
-// import { fetchPantryItems} from "../../actions/itemsActions";
-//
-// // material-ui
-// import clsx from 'clsx';
-// import { lighten, makeStyles } from '@material-ui/core/styles';
-// import Table from '@material-ui/core/Table';
-// import TableBody from '@material-ui/core/TableBody';
-// import TableCell from '@material-ui/core/TableCell';
-// import TableContainer from '@material-ui/core/TableContainer';
-// import TableHead from '@material-ui/core/TableHead';
-// import TablePagination from '@material-ui/core/TablePagination';
-// import TableRow from '@material-ui/core/TableRow';
-// import TableSortLabel from '@material-ui/core/TableSortLabel';
-// import Toolbar from '@material-ui/core/Toolbar';
-// import Typography from '@material-ui/core/Typography';
-// import Paper from '@material-ui/core/Paper';
-// import Checkbox from '@material-ui/core/Checkbox';
-// import IconButton from '@material-ui/core/IconButton';
-// import Tooltip from '@material-ui/core/Tooltip';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Switch from '@material-ui/core/Switch';
-// import DeleteIcon from '@material-ui/icons/Delete';
-// import FilterListIcon from '@material-ui/icons/FilterList';
-//
-// class ItemTable extends Component {
-//     constructor(props) {
-//         super(props);
-//
-//         this.onClick = this.onClick.bind(this);
-//     }
-//
-//     componentWillMount() {
-//         this.props.fetchPantryItems(this.props.pantry.activePantry)
-//     }
-//
-//
-//
-//     useStyles = makeStyles((theme) => ({
-//         seeMore: {
-//             marginTop: theme.spacing(3),
-//         },
-//     }));
-//
-//     render() {
-//
-//
-//         return (
-//
-//         );
-//     }
-// }
-//
-// ItemTable.propTypes = {
-//     items: PropTypes.array.isRequired,
-//     user: PropTypes.object
-// };
-//
-// const mapStateToProps = state => ({
-//     items: state.items.itemList,
-//     pantry: state.pantry
-// });
-//
-// export default connect(mapStateToProps, { fetchPantryItems })(ItemTable);
-
-
-//--------------------------------------------------------------------------------------
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import {fetchPantryItems} from "../../actions/itemsActions";
-import clsx from 'clsx';
-import { lighten, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -81,16 +10,12 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+
+import EnhancedTableToolbar from '../../common/table/EnhancedTableToolbar';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -181,66 +106,6 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-const useToolbarStyles = makeStyles((theme) => ({
-    root: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(1),
-    },
-    highlight:
-        theme.palette.type === 'light'
-            ? {
-                color: theme.palette.secondary.main,
-                backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-            }
-            : {
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.secondary.dark,
-            },
-    title: {
-        flex: '1 1 100%',
-    },
-}));
-
-const EnhancedTableToolbar = (props) => {
-    const classes = useToolbarStyles();
-    const { numSelected } = props;
-
-    return (
-        <Toolbar
-            className={clsx(classes.root, {
-                [classes.highlight]: numSelected > 0,
-            })}
-        >
-            {numSelected > 0 ? (
-                <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-                    {numSelected} selected
-                </Typography>
-            ) : (
-                <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                    My Items
-                </Typography>
-            )}
-
-            {numSelected > 0 ? (
-                <Tooltip title="Delete">
-                    <IconButton aria-label="delete">
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton aria-label="filter list">
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
-            )}
-        </Toolbar>
-    );
-};
-
-EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-};
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -278,13 +143,12 @@ function EnhancedTable(props) {
 
     // Fetch items on mount
     useEffect(() => {
-        props.fetchPantryItems(props.pantry.activePantry);
+        //props.fetchPantries();
     }, []);
 
     // Set items on render
     useEffect(() => {
-        props.fetchPantryItems(props.pantry.activePantry);
-        setRows(props.items);
+        setRows(props.pantry.pantries);
     });
 
     const handleRequestSort = (event, property) => {
@@ -342,7 +206,7 @@ function EnhancedTable(props) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar numSelected={selected.length} title='My Groups'/>
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -385,10 +249,11 @@ function EnhancedTable(props) {
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
                                                 {row.name}
                                             </TableCell>
-                                            <TableCell align="right">{row.calories}</TableCell>
-                                            <TableCell align="right">{row.fat}</TableCell>
-                                            <TableCell align="right">{row.carbs}</TableCell>
-                                            <TableCell align="right">{row.protein}</TableCell>
+                                            <TableCell align="left">{row.type}</TableCell>
+                                            <TableCell align="left">{row.location}</TableCell>
+                                            <TableCell align="left">{row.expirationDate}</TableCell>
+                                            <TableCell align="left">{row.owner}</TableCell>
+                                            <TableCell align="left">{row.note}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -419,13 +284,11 @@ function EnhancedTable(props) {
 }
 
 EnhancedTable.propTypes = {
-    items: PropTypes.array.isRequired,
     pantry: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    items: state.items.itemList,
     pantry: state.pantry
 });
 
-export default connect(mapStateToProps, { fetchPantryItems })(EnhancedTable);
+export default connect(mapStateToProps)(EnhancedTable);

@@ -1,6 +1,6 @@
 import { REGISTER_NEW_USER, FETCH_USER_DATA } from "./types";
 
-export const registerNewUser = (newUser, history) => dispatch => {
+export const registerNewUser = (newUser) => dispatch => {
     fetch('https://vpantryapi.herokuapp.com/signup', {
         method: 'POST',
         headers: {
@@ -10,11 +10,10 @@ export const registerNewUser = (newUser, history) => dispatch => {
     })
         .then(res => res.json())
         .then(res => {
-            if (!res.success) {
-                //TODO set text for error message on screen?
-            } else {
-                history.push('/');
-            }
+
+            console.log('register', res.message);
+
+
         })
         .catch(error => console.log('error', error));
 };
@@ -30,14 +29,11 @@ export const fetchUserData = () => dispatch => {
         .then(res => res.json())
         .then(res => {
             if (res) {
-                const user = {
-                    ...res,
-                    activePantry: res.adminofgroups[0],
-                };
                 dispatch({
                     type: FETCH_USER_DATA,
-                    payload: user
+                    payload: res
                 });
             }
-        });
+        })
+        .catch(error => console.log('error', error));
 };

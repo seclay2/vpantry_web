@@ -1,12 +1,13 @@
 import {
     SET_ACTIVE_PANTRY,
+    FETCH_PANTRIES,
     CREATE_PANTRY,
     JOIN_PANTRY,
     DELETE_PANTRY } from '../actions/types';
 
 const initialState = {
-    activePantry: '',
-    pantry: {}
+    activePantry: {},
+    pantries: []
 };
 
 export default function(state = initialState, action) {
@@ -17,14 +18,15 @@ export default function(state = initialState, action) {
                 activePantry: action.payload
             }
         }
-        case CREATE_PANTRY:
-        case JOIN_PANTRY:
-        case DELETE_PANTRY: {
+        case FETCH_PANTRIES: {
             return {
                 ...state,
-                pantry: action.payload
+                pantries: action.payload
             }
         }
+        //case CREATE_PANTRY:
+        //case JOIN_PANTRY:
+        //case DELETE_PANTRY:
         default:
             return state;
     }

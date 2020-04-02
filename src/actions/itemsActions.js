@@ -5,12 +5,13 @@ import {
     DELETE_ITEM } from "./types";
 
 export const fetchPantryItems = group_id => dispatch => {
-    fetch('https://vpantryapi.herokuapp.com/items?group_id=' + group_id, {
+    const url = 'https://vpantryapi.herokuapp.com/items?group_id='+group_id;
+    fetch(url , {
         method: 'GET',
         headers: {
             'content-type': 'application/json',
             'token': sessionStorage.getItem('jwtToken')
-        },
+        }
     })
         .then(res => res.json())
         .then(res => {

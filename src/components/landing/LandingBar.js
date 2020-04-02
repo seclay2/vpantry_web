@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/authActions';
@@ -14,7 +14,7 @@ import Link from "@material-ui/core/Link";
 import Container from '@material-ui/core/Container';
 import logo from '../../assets/images/green-logo.png';
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Backdrop from "@material-ui/core/Backdrop/Backdrop";
+import Backdrop from "@material-ui/core/Backdrop";
 
 // material-ui styling
 const useStyles = makeStyles((theme) => ({
@@ -131,12 +131,6 @@ function LandingBar(props) {
                     </Container>
                 </Toolbar>
             </AppBar>
-            {open &&
-            <Backdrop className={classes.backdrop} open={open} >
-                <CircularProgress color="inherit" />
-            </Backdrop>
-            }
-
         </div>
     );
 }
@@ -154,5 +148,9 @@ export default connect(mapStateToProps, {login})(LandingBar);
 
 
 /*
-
+        {open &&
+                <Backdrop open={open} >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+                }
  */

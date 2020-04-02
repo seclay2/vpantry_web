@@ -14,8 +14,8 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Typography from "@material-ui/core/Typography";
-import PlainBar from "../PlainBar";
-import Copyright from "../Copyright";
+import PlainBar from "../common/PlainBar";
+import Copyright from "../common/Copyright";
 
 import logo from '../../assets/images/white-logo.png';
 
@@ -23,17 +23,38 @@ class RegisterForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            response: {},
             given_name: '',
             family_name: '',
             nickname: '',
             email: '',
             password: '',
-            password2: '',
+            password2: ''
         };
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
+
+    async registerNewUser(newUser) {
+        const res = await fetch('https://vpantryapi.herokuapp.com/signup', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify(newUser)
+        });
+        const json = await res.json();
+        this.setState({response: json});
+
+            // .then(res => res.json())
+            // .then(res => {
+            //
+            //     this.setState({response: res});
+            //
+            // })
+            // .catch(error => console.log('error', error));
+    };
 
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });
@@ -42,9 +63,21 @@ class RegisterForm extends Component {
     onSubmit(e) {
         e.preventDefault();
 
-        const newUser = this.state;
+        let newUser = this.state;
+        delete newUser['response'];
+        // this.props.registerNewUser(newUser);
+        this.registerNewUser(newUser);
+    }
 
-        this.props.registerNewUser(newUser);
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.response !== this.state.response) {
+            if (this.state.response.success) {
+                this.props.history.replace('/');
+            }
+            else {
+                alert(JSON.stringify(this.state.response));
+            }
+        }
     }
 
     useStyles = makeStyles((theme) => ({

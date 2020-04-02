@@ -24,7 +24,8 @@ export const login = (credentials) => dispatch => {
 export const logout = () => dispatch => {
     dispatch({
         type: LOGOUT
-    })
+    });
+    sessionStorage.clear();
 };
 
 export const setToken = token => dispatch => {

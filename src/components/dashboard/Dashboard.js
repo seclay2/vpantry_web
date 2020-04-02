@@ -24,7 +24,8 @@ class Dashboard extends Component {
 
         this.state = {
             dataReady: false,
-            activeView: 'MY_PANTRIES'
+            activeView: 'MY_PANTRIES',
+            itemsExist: false
         }
     }
 
@@ -32,19 +33,18 @@ class Dashboard extends Component {
         this.props.fetchUserData();
     }
 
-    componentDidUpdate(prevProps, nextProps, snapshot) {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.user !== prevProps.user) {
             this.props.fetchPantries();
-
-            // let adminList = this.props.user.adminofgroups;
-            // let userList = this.props.user.userofgroups;
-            // if (adminList[0])
-            //     this.props.setActivePantry(adminList[0]);
-            // else if (userList[0])
-            //     this.props.setActivePantry(userList[0]);
         }
         if (this.props.pantry.pantries !== prevProps.pantry.pantries) {
-            this.props.setActivePantry(this.props.pantry.pantries[0])
+            if (this.props.pantry.pantries.length) {
+                this.props.setActivePantry(this.props.pantry.pantries[0]);
+                this.setState({itemsExist: true});
+            }
+            else {
+                this.props.setActivePantry('null');
+            }
         }
         if (this.props.pantry.activePantry !== prevProps.pantry.activePantry) {
             this.setState({dataReady: true});
@@ -84,7 +84,7 @@ class Dashboard extends Component {
                         {this.state.activeView === 'MY_PANTRIES' &&
                         <div>
                             <PantriesDrawer/>
-                            <ItemTable/>
+                            {this.state.itemsExist ? <ItemTable/> : <h2>No items</h2>}
                         </div>
                         }
                         {this.state.activeView === 'MY_GROUPS' &&

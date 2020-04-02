@@ -6,8 +6,8 @@ import {
     DELETE_PANTRY } from '../actions/types';
 
 const initialState = {
-    activePantry: {},
-    pantries: []
+    activePantry: 'initial',
+    pantries: 'initial'
 };
 
 export default function(state = initialState, action) {

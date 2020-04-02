@@ -2,14 +2,21 @@ import {
     SET_ACTIVE_PANTRY,
     CREATE_PANTRY,
     JOIN_PANTRY,
-    DELETE_PANTRY, FETCH_PANTRIES,
+    DELETE_PANTRY,
+    FETCH_PANTRIES,
 } from './types';
 
 export const setActivePantry = pantry => dispatch => {
-    dispatch({
-        type: SET_ACTIVE_PANTRY,
-        payload: pantry
-    });
+    if (pantry === 'null')
+        dispatch({
+            type: SET_ACTIVE_PANTRY,
+            payload: 'empty'
+        });
+    else
+        dispatch({
+            type: SET_ACTIVE_PANTRY,
+            payload: pantry
+        });
 
 };
 
@@ -23,10 +30,16 @@ export const fetchPantries = () => dispatch => {
     })
         .then(res => res.json())
         .then(res => {
-            dispatch({
-                type: FETCH_PANTRIES,
-                payload: res.pantries
-            });
+            if (res.success)
+                dispatch({
+                    type: FETCH_PANTRIES,
+                    payload: res.pantries
+                });
+            else
+                dispatch({
+                    type: FETCH_PANTRIES,
+                    payload: []
+                });
         })
         .catch(error => console.log('error', error));
 };

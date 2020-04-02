@@ -52,11 +52,12 @@ function PantriesDrawer(props) {
             <Divider />
             { props.pantry.activePantry !== {} ?
                 <List>
-                    {props.pantry.pantries.map((pantry, index) => (
+                    {props.pantry.pantries !== [] ?
+                        props.pantry.pantries.map((pantry, index) => (
                         <ListItem button key={pantry.name} >
                             <ListItemText primary={pantry.name} />
                         </ListItem>
-                    ))}
+                    )) : <ListItem>You have no pantries</ListItem>}
                     <ListItem>
                         <Divider />
                     </ListItem>

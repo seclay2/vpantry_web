@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LandingBar from './LandingBar';
 import { setToken } from '../../actions/authActions';
+import LandingCard from "./LandingCard";
+import Footer from "../common/Copyright";
 
 class Landing extends Component {
 
@@ -31,7 +33,8 @@ class Landing extends Component {
             <div>
                 <LandingBar />
                 <br />
-                <h1>Landing Page</h1>
+                <LandingCard />
+                <Footer />
             </div>
         );
     }

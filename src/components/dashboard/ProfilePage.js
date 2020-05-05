@@ -52,6 +52,10 @@ class ProfilePage extends Component {
         submit: {
             margin: theme.spacing(3, 0, 2),
         },
+        red: {
+            primary: theme.color.red,
+            margin: theme.spacing(3, 0, 2),
+        }
     }));
 
     render() {
@@ -116,17 +120,29 @@ class ProfilePage extends Component {
                                 <Grid item xs={12}>
                                     <Link >Change password</Link>
                                 </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        className={classes.submit}
+                                    >
+                                        Submit Changes
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        className={classes.red}
+                                        onClick={''}
+                                    >
+                                        Delete Account
+                                    </Button>
+                                </Grid>
                             </Grid>
                             <br />
-                            <br />
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Submit Changes
-                            </Button>
+
                         </form>
                     </div>
                     <br />

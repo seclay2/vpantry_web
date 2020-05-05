@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
-import {fetchPantryItems} from "../../../actions/itemsActions";
+import {fetchPantryItems, setItem } from "../../../actions/itemsActions";
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -172,7 +173,7 @@ function EnhancedTable(props) {
         setSelected([]);
     };
 
-    const handleClick = (event, id) => {
+    const handleCheckboxClick = (event, id) => {
         const selectedIndex = selected.indexOf(id);
         let newSelected = [];
 
@@ -189,6 +190,10 @@ function EnhancedTable(props) {
             );
         }
         setSelected(newSelected);
+    };
+
+    const handleClick = (event, item) => {
+        props.setItem(item);
     };
 
     const handleChangePage = (event, newPage) => {
@@ -238,13 +243,15 @@ function EnhancedTable(props) {
                                     date.setTime(row.expirationDate);
                                     if (date.toDateString() === 'Invalid Date')
                                         date = '';
+                                    else if (date === new Date(0))
+                                        date = '';
                                     else
-                                        date = date.toDateString()
+                                        date = date.toDateString();
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row._id)}
+                                            onClick={(event) => handleClick(event, row)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
@@ -255,16 +262,17 @@ function EnhancedTable(props) {
                                                 <Checkbox
                                                     checked={isItemSelected}
                                                     inputProps={{ 'aria-labelledby': labelId }}
+                                                    onChange={(event) => handleCheckboxClick(event, row._id)}
                                                 />
                                             </TableCell>
-                                            <TableCell component="th" id={labelId} scope="row" padding="none">
+                                            <TableCell component={Link} to={'/updateitem'} style={{textDecoration:'none'}} id={labelId} scope="row" padding="none" >
                                                 {row.name}
                                             </TableCell>
-                                            <TableCell align="left">{row.type}</TableCell>
-                                            <TableCell align="left">{row.location}</TableCell>
-                                            <TableCell align="left">{date}</TableCell>
-                                            <TableCell align="left">{row.owner.split('\n')[0]}</TableCell>
-                                            <TableCell align="left">{row.note}</TableCell>
+                                            <TableCell align="left" component={Link} to={'/updateitem'} style={{textDecoration:'none'}}>{row.type}</TableCell>
+                                            <TableCell align="left" component={Link} to={'/updateitem'} style={{textDecoration:'none'}}>{row.location}</TableCell>
+                                            <TableCell align="left" component={Link} to={'/updateitem'} style={{textDecoration:'none'}}>{date}</TableCell>
+                                            <TableCell align="left" component={Link} to={'/updateitem'} style={{textDecoration:'none'}}>{row.owner.split('\n')[0]}</TableCell>
+                                            <TableCell align="left" component={Link} to={'/updateitem'} style={{textDecoration:'none'}}>{row.note}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -296,6 +304,7 @@ function EnhancedTable(props) {
 
 EnhancedTable.propTypes = {
     fetchPantryItems: PropTypes.func.isRequired,
+    setItem: PropTypes.func.isRequired,
     pantry: PropTypes.object.isRequired
 };
 
@@ -304,4 +313,4 @@ const mapStateToProps = state => ({
     pantry: state.pantry
 });
 
-export default connect(mapStateToProps, { fetchPantryItems })(EnhancedTable);
+export default connect(mapStateToProps, { fetchPantryItems, setItem })(EnhancedTable);

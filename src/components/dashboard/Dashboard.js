@@ -23,6 +23,7 @@ import ProfilePage from "./ProfilePage";
 class Dashboard extends Component {
     constructor(props) {
         super(props);
+        this.setPantry = this.setPantry.bind(this);
 
         this.state = {
             dataReady: false,
@@ -35,22 +36,36 @@ class Dashboard extends Component {
         this.props.fetchUserData();
     }
 
+    componentDidMount() {
+        this.props.fetchPantries();
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.user !== prevProps.user) {
-            this.props.fetchPantries();
-        }
+        //if (this.props.user !== prevProps.user) {
+        //    this.props.fetchPantries();
+        //}
         if (this.props.pantry.pantries !== prevProps.pantry.pantries) {
-            if (this.props.pantry.pantries.length) {
-                this.props.setActivePantry(this.props.pantry.pantries[0]);
-                this.setState({itemsExist: true});
+            if (prevProps.pantry.pantries === 'initial') {
+                if (this.props.pantry.pantries.length) {
+                    this.props.setActivePantry(this.props.pantry.pantries[0]);
+                    this.setState({itemsExist: true});
+                }
+                else {
+                    this.props.setActivePantry('null');
+                }
             }
             else {
-                this.props.setActivePantry('null');
+                this.setState({dataReady: true});
+                this.setState({itemsExist: true});
             }
         }
         if (this.props.pantry.activePantry !== prevProps.pantry.activePantry) {
             this.setState({dataReady: true});
         }
+    }
+
+    setPantry(event, pantry) {
+        this.props.setActivePantry(pantry);
     }
 
     changeView = (activeView) => {
@@ -93,7 +108,7 @@ class Dashboard extends Component {
                             <hr/>
                             {this.state.activeView === 'MY_PANTRIES' &&
                                 <main className={classes.content}>
-                                    <PantriesDrawer />
+                                    <PantriesDrawer setPantry={this.setPantry}/>
                                     <Button component={Link}
                                             to={'/additem'}
                                             variant="contained"
@@ -105,7 +120,7 @@ class Dashboard extends Component {
                             }
                             {this.state.activeView === 'MY_GROUPS' &&
                             <div>
-                                <GroupsTable />
+                                <GroupsTable history={this.props.history}/>
                             </div>
                             }
                             {this.state.activeView === 'MY_PROFILE' &&
@@ -124,12 +139,14 @@ Dashboard.propTypes = {
     setActivePantry: PropTypes.func.isRequired,
     fetchPantries: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
-    pantry: PropTypes.object.isRequired
+    pantry: PropTypes.object.isRequired,
+    items: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
     user: state.user,
-    pantry: state.pantry
+    pantry: state.pantry,
+    items: state.items.itemList
 });
 
 export default connect(mapStateToProps, { fetchUserData, setActivePantry, fetchPantries })(Dashboard);

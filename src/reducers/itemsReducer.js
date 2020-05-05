@@ -2,7 +2,9 @@ import {
     FETCH_PANTRY_ITEMS,
     CREATE_ITEM,
     UPDATE_ITEM,
-    DELETE_ITEM } from "../actions/types";
+    DELETE_ITEM,
+    SET_ITEM
+} from "../actions/types";
 
 const initialState = {
     itemList: [],
@@ -19,7 +21,8 @@ export default function(state = initialState, action) {
         }
         case CREATE_ITEM:
         case UPDATE_ITEM:
-        case DELETE_ITEM: {
+        case DELETE_ITEM:
+        case SET_ITEM: {
             return {
                 ...state,
                 item: action.payload

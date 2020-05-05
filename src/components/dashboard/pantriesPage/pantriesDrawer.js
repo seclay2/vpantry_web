@@ -31,9 +31,8 @@ function PantriesDrawer(props) {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
 
-    const onClick = (e) => {
+    const onClick = (e, pantry) => {
         e.preventDefault();
-
         setOpen(true);
     };
 
@@ -58,7 +57,7 @@ function PantriesDrawer(props) {
                 <List>
                     {props.pantry.pantries !== [] ?
                         props.pantry.pantries.map((pantry, index) => (
-                        <ListItem button key={pantry.name} >
+                        <ListItem button key={pantry._id} onClick={event => {props.setPantry(event, pantry)}}>
                             <ListItemText primary={pantry.name} />
                         </ListItem>
                     )) : <ListItem>You have no pantries</ListItem>}
@@ -66,7 +65,7 @@ function PantriesDrawer(props) {
                         <Divider />
                     </ListItem>
                     <ListItem>
-                        <Link to='/additem'>+ Create New Pantry</Link>
+                        <Link to='/addpantry'>+ Create New Pantry</Link>
                     </ListItem>
                 </List>
                 :
@@ -78,7 +77,7 @@ function PantriesDrawer(props) {
                         <Divider />
                     </ListItem>
                     <ListItem>
-                        <Link to='/additem'>+ Create New Pantry</Link>
+                        <Link to='/addpantry'>+ Create New Pantry</Link>
                     </ListItem>
                 </List>
             }
@@ -87,7 +86,8 @@ function PantriesDrawer(props) {
 }
 
 PantriesDrawer.propTypes = {
-    pantry: PropTypes.object.isRequired
+    pantry: PropTypes.object.isRequired,
+    setPantry: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

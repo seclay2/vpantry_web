@@ -1,143 +1,245 @@
 import React, {Component} from 'react';
-import moment from "moment";
-import { updateItem } from "../../../actions/itemsActions"
+import {updateItem} from "../../../actions/itemsActions";
+import PlainBar from "../../common/PlainBar";
+import Button from '@material-ui/core/Button';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-
+import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import Box from "@material-ui/core/Box";
+import Copyright from "../../common/Copyright";
+import {makeStyles} from "@material-ui/core/styles";
 
 class UpdateItemForm extends Component {
     constructor(props) {
         super(props);
-        this.onChangeEdititemname = this.onChangeEdititemname.bind(this);
-        this.onChangeEdititemlocation = this.onChangeEdititemlocation.bind(this);
-        this.onChangeEdititemtype = this.onChangeEdititemtype.bind(this);
-        this.onChangeEdititemquantity = this.onChangeEdititemquantity.bind(this);
-        this.onChangeEdititemdescription = this.onChangeEdititemdescription.bind(this);
-        this.onChangeEdititemexp = this.onChangeEdititemexp.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        this.onChangeItemName = this.onChangeItemName.bind(this);
+        this.onChangeItemLocation = this.onChangeItemLocation.bind(this);
+        this.onChangeItemType = this.onChangeItemType.bind(this);
+        this.onChangeItemQuantity = this.onChangeItemQuantity.bind(this);
+        this.onChangeItemExp = this.onChangeItemExp.bind(this);
+        this.onChangeItemDescription = this.onChangeItemDescription.bind(this);
+        this.submitItem = this.submitItem.bind(this);
+
         this.state = {
-            itemname: '',
-            itemlocation: '',
-            itemtype: '',
-            itemquantity: '',
-            expirationdate: '',
-            itemdescription: '',
+            name: '',
+            location: '',
+            type: '',
+            quantity: '',
+            expirationDate: '',
+            viewDate: '',
+            note: '',
+            item: {}
         }
+
     }
 
     componentDidMount() {
-
-    }
-
-    onChangeEdititemname(e){
-        this.setState({
-            itemname: e.target.value
-        });
-    }
-
-    onChangeEdititemlocation(e){
-        this.setState({
-            itemlocation: e.target.value
-        });
-    }
-
-    onChangeEdititemtype(e){
-        this.setState({
-            itemtype: e.target.value
-        });
-    }
-
-    onChangeEdititemquantity(e){
-        this.setState({
-            itemquantity: e.target.value
-        });
-    }
-
-    onChangeEdititemexp(e){
-        this.setState({
-            expirationdate: e.target.value
-        });
-    }
-
-    onChangeEdititemdescription(e){
-        this.setState({
-            itemdescription: e.target.value
-        });
-    }
-
-    onSubmit(e){
-        e.preventDefault();
-        const obj = {
-            itemname : this.state.itemname,
-            itemlocation : this.state.itemlocation,
-            itemtype : this.state.itemtype,
-            itemquantity : this.state.itemquantity,
-            expirationdate : this.state.expirationdate,
-            itemdescription : this.state.itemdescription
+        const newState = {
+            name: this.props.items.item.name,
+            location: this.props.items.item.location,
+            type: this.props.items.item.type,
+            quantity: this.props.items.item.quantity,
+            expirationDate: this.props.items.item.expirationDate,
+            viewDate: '',
+            note: this.props.items.item.note,
+            item: {}
         };
-        const {dispatch} = this.props;
-        dispatch(updateItem(obj));
-        this.props.history.push('/dashboard')
+        this.setState(newState);
     }
+
+    onChangeItemName(e){
+        this.setState({
+            name: e.target.value
+        });
+    }
+
+    onChangeItemLocation(e){
+        this.setState({
+            location: e.target.value
+        });
+    }
+
+    onChangeItemType(e){
+        this.setState({
+            type: e.target.value
+        });
+    }
+
+    onChangeItemQuantity(e){
+        this.setState({
+            quantity: e.target.value
+        });
+    }
+
+    onChangeItemExp(e){
+        let date = e.target.value.split('-');
+        date = new Date(parseInt(date[0]), parseInt(date[1])-1, parseInt(date[2]));
+        this.setState({
+            expirationDate: date.getTime(),
+            viewDate: e.target.value
+        });
+    }
+
+    onChangeItemDescription(e){
+        this.setState({
+            note: e.target.value
+        });
+    }
+
+    submitItem(e){
+        e.preventDefault();
+        const newItem = {
+            _id: this.props.items.item._id,
+            name: this.state.name,
+            location: this.state.location,
+            type: this.state.type,
+            quantity: this.state.quantity,
+            expirationDate: this.state.expirationDate,
+            note: this.state.note,
+        };
+        if (newItem.name === '')
+            alert('Name required');
+        else if (newItem.type === '')
+            alert('Type required');
+        else {
+            this.props.updateItem(newItem);
+            this.props.history.push('/');
+        }
+    }
+
+    useStyles = makeStyles((theme) => ({
+        paper: {
+            marginTop: theme.spacing(8),
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+        },
+        form: {
+            width: '100%', // Fix IE 11 issue.
+            marginTop: theme.spacing(3),
+        },
+        submit: {
+            margin: theme.spacing(3, 0, 2),
+        },
+    }));
 
     render()
     {
-        return(
-            <div style={{marginTop: 25}}>
-                <h3>Update Your Item</h3>
-                <form onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                        <label>Item Name: </label>
-                        <input type="text"
-                               className="form-control"
-                               value={this.state.itemname}
-                               onChange={this.onChangeEdititemname}
-                        />
+        const classes = this.useStyles;
+
+        return (
+            <div >
+                <CssBaseline />
+                <PlainBar />
+                <br />
+                <Container component="main" maxWidth="xs">
+                    <div className={classes.paper}>
+                        <form className={classes.form} noValidate onSubmit={this.submitItem}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <Typography variant='h3'>Update Item</Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        autoComplete=""
+                                        name="name"
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="name"
+                                        label="Name"
+                                        autoFocus
+                                        onChange={this.onChangeItemName}
+                                        value={this.state.name}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth
+                                        id="location"
+                                        label="Location"
+                                        name="Location"
+                                        autoComplete=""
+                                        onChange={this.onChangeItemLocation}
+                                        value={this.state.location}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="type"
+                                        label="Type"
+                                        name="type"
+                                        autoComplete=""
+                                        onChange={this.onChangeItemType}
+                                        value={this.state.type}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth
+                                        id="quantity"
+                                        label="Quantity"
+                                        name="quantity"
+                                        autoComplete=""
+                                        onChange={this.onChangeItemQuantity}
+                                        value={this.state.quantity}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variation="outlined"
+                                        id="expirationDate"
+                                        label="Expiration Date"
+                                        type="date"
+                                        defaultValue=""
+                                        onChange={this.onChangeItemExp}
+                                        value={this.state.viewDate}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        multiline='true'
+                                        rows="4"
+                                        fullWidth
+                                        id="note"
+                                        label="Notes"
+                                        name="note"
+                                        autoComplete=""
+                                        onChange={this.onChangeItemDescription}
+                                        value={this.state.note}
+                                    />
+                                </Grid>
+
+                            </Grid>
+                            <br />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Update Item
+                            </Button>
+                        </form>
                     </div>
-                    <div className="form-group">
-                        <label>Item Location: </label>
-                        <input type="text"
-                               className="form-control"
-                               value={this.state.itemlocation}
-                               onChange={this.onChangeEdititemlocation}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Item Type: </label>
-                        <input type="text"
-                               className="form-control"
-                               value={this.state.itemtype}
-                               onChange={this.onChangeEdititemtype}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Quantity: </label>
-                        <input type="text"
-                               className="form-control"
-                               value={this.state.itemquantity}
-                               onChange={this.onChangeEdititemquantity}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Expiration Date: </label>
-                        <input type="text"
-                               className="form-control"
-                               value={moment(this.state.expirationdate).format('MM-DD-YYYY')}
-                               onChange={this.onChangeEdititemexp}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Note </label>
-                        <input type="text"
-                               className="form-control"
-                               value={this.state.itemdescription}
-                               onChange={this.onChangeEdititemdescription}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input type="submit" value="Update Item" className="btn btn-primary" onSubmit={this.onSubmit}/>
-                    </div>
-                </form>
+                    <Box mt={5}>
+                        <Copyright />
+                    </Box>
+                </Container>
             </div>
         )
     }
@@ -145,11 +247,14 @@ class UpdateItemForm extends Component {
 
 
 UpdateItemForm.propTypes = {
-    updateItem: PropTypes.func.isRequired
+    updateItem: PropTypes.func.isRequired,
+    pantry: PropTypes.string.isRequired,
+    items: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-
+    pantry: state.pantry,
+    items: state.items
 });
 
 export default connect(mapStateToProps, { updateItem })(UpdateItemForm);

@@ -2,7 +2,8 @@ import {
     FETCH_PANTRY_ITEMS,
     CREATE_ITEM,
     UPDATE_ITEM,
-    DELETE_ITEM } from "./types";
+    DELETE_ITEM, SET_ITEM
+} from "./types";
 
 export const fetchPantryItems = group_id => dispatch => {
     const url = 'https://vpantryapi.herokuapp.com/items?group_id='+group_id;
@@ -10,7 +11,8 @@ export const fetchPantryItems = group_id => dispatch => {
     fetch(url , {
         method: 'GET',
         headers: {
-            'content-type': 'application/json',
+            'Accept': 'application/json',
+            'Content-type': 'application/json',
             'token': sessionStorage.getItem('jwtToken')
         }
     })
@@ -25,7 +27,7 @@ export const fetchPantryItems = group_id => dispatch => {
             } else {
                 dispatch({
                     type: FETCH_PANTRY_ITEMS,
-                    payload: [{ _id: 0, name: 'No items in your pantry yet!' }]
+                    payload: []
                 });
             }
         })
@@ -37,7 +39,7 @@ export const createItem = item => dispatch => {
     fetch('https://vpantryapi.herokuapp.com/items', {
         method: 'POST',
         headers: {
-            'content-type': 'application/json',
+            'Content-type': 'application/json',
             'token': sessionStorage.getItem('jwtToken')
         },
         body: JSON.stringify(item)
@@ -59,12 +61,11 @@ export const createItem = item => dispatch => {
 
 };
 
-export const updateItem = item => dispatch => {
-    console.log(JSON.stringify(item));
+export const updateItem = (item) => dispatch => {
     fetch('https://vpantryapi.herokuapp.com/items', {
         method: 'PUT',
         headers: {
-            'content-type': 'application/json',
+            'Content-type': 'application/json',
             'token': sessionStorage.getItem('jwtToken')
         },
         body: JSON.stringify(item)
@@ -86,6 +87,7 @@ export const deleteItem = item_id => dispatch => {
     fetch('https://vpantryapi.herokuapp.com/items?item_id=' + item_id, {
         method: 'DELETE',
         headers: {
+            'Content-type': 'application/json',
             'token': sessionStorage.getItem('jwtToken')
         }
     })
@@ -99,4 +101,11 @@ export const deleteItem = item_id => dispatch => {
             }
         })
         .catch(error => console.log('error', error));
+};
+
+export const setItem = item => dispatch => {
+    dispatch({
+        type: SET_ITEM,
+        payload: item
+    });
 };

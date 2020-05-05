@@ -83,7 +83,7 @@ class ItemForm extends Component {
             quantity: this.state.quantity,
             expirationDate: this.state.expirationDate,
             note: this.state.note,
-            groupId: this.props.pantry.activePantry
+            groupId: this.props.pantry.activePantry._id
         };
         if (newItem.name === '')
             alert('Name required');
@@ -195,7 +195,7 @@ class ItemForm extends Component {
                                 <Grid item xs={12}>
                                     <TextField
                                         variant="outlined"
-                                        multiline='true'
+                                        multiline={true}
                                         rows="4"
                                         fullWidth
                                         id="note"
@@ -232,7 +232,7 @@ class ItemForm extends Component {
 
 ItemForm.propTypes = {
     createItem: PropTypes.func.isRequired,
-    pantry: PropTypes.string.isRequired,
+    pantry: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({

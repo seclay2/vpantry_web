@@ -83,10 +83,9 @@ export const updateItem = item => dispatch => {
 };
 
 export const deleteItem = item_id => dispatch => {
-    fetch('https://vpantryapi.herokuapp.com/items?' + item_id, {
+    fetch('https://vpantryapi.herokuapp.com/items?item_id=' + item_id, {
         method: 'DELETE',
         headers: {
-            'content-type': 'application/json',
             'token': sessionStorage.getItem('jwtToken')
         }
     })

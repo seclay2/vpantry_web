@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import {deleteItem} from "../../../actions/itemsActions";
+import {deleteItem, fetchPantryItems} from "../../../actions/itemsActions";
 
 
 const useToolbarStyles = makeStyles((theme) => ({
@@ -41,6 +41,7 @@ const EnhancedTableToolbar = (props) => {
         for (let i = 0; i < props.items.length; i++) {
             props.deleteItem(props.items[i]);
         }
+        props.history.push('/');
     };
 
     return (
@@ -81,8 +82,7 @@ EnhancedTableToolbar.propTypes = {
     items: PropTypes.array.isRequired
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = state => ({
+});
 
-};
-
-export default connect(null, { deleteItem })(EnhancedTableToolbar);
+export default connect(null, { deleteItem, fetchPantryItems })(EnhancedTableToolbar);

@@ -100,7 +100,7 @@ class Dashboard extends Component {
                                             color="primary" >
                                         Add Item
                                     </Button>
-                                    {this.state.itemsExist ? <ItemTable/> : <h2>No items</h2>}
+                                    {this.state.itemsExist ? <ItemTable history={this.props.history}/> : <h2>No items</h2>}
                                 </main>
                             }
                             {this.state.activeView === 'MY_GROUPS' &&

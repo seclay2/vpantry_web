@@ -211,7 +211,7 @@ function EnhancedTable(props) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} items={selected} title='My Items'/>
+                <EnhancedTableToolbar numSelected={selected.length} items={selected} history={props.history} title='My Items'/>
                 <TableContainer>
                     <Table
                         className={classes.table}

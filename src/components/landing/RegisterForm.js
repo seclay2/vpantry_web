@@ -7,8 +7,6 @@ import { registerNewUser} from "../../actions/userActions";
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
@@ -16,8 +14,6 @@ import Container from '@material-ui/core/Container';
 import Typography from "@material-ui/core/Typography";
 import PlainBar from "../common/PlainBar";
 import Copyright from "../common/Copyright";
-
-import logo from '../../assets/images/white-logo.png';
 
 class RegisterForm extends Component {
     constructor(props) {
@@ -46,14 +42,6 @@ class RegisterForm extends Component {
         });
         const json = await res.json();
         this.setState({response: json});
-
-            // .then(res => res.json())
-            // .then(res => {
-            //
-            //     this.setState({response: res});
-            //
-            // })
-            // .catch(error => console.log('error', error));
     };
 
     onChange(e) {

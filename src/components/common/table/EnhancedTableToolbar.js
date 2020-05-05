@@ -9,6 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import {deleteItem} from "../../../actions/itemsActions";
+
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
@@ -34,6 +36,13 @@ const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected } = props;
 
+    const deleteItems = (e) => {
+        e.preventDefault();
+        for (let i = 0; i < props.items.length; i++) {
+            props.deleteItem(props.items[i]);
+        }
+    };
+
     return (
         <Toolbar
             className={clsx(classes.root, {
@@ -52,7 +61,7 @@ const EnhancedTableToolbar = (props) => {
 
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
-                    <IconButton aria-label="delete">
+                    <IconButton aria-label="delete" onClick={deleteItems}>
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
@@ -69,6 +78,11 @@ const EnhancedTableToolbar = (props) => {
 
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
+    items: PropTypes.array.isRequired
 };
 
-export default EnhancedTableToolbar;
+const mapStateToProps = state => {
+
+};
+
+export default connect(null, { deleteItem })(EnhancedTableToolbar);

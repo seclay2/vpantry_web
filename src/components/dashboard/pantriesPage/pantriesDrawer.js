@@ -7,7 +7,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Link from "@material-ui/core/Link";
+import {Link} from 'react-router-dom';
 import Typography from "@material-ui/core/Typography";
 
 const drawerWidth = 240;
@@ -37,6 +37,10 @@ function PantriesDrawer(props) {
         setOpen(true);
     };
 
+    const onClose = () => {
+        setOpen(false);
+    };
+
     return (
         <Drawer
             className={classes.drawer}
@@ -62,7 +66,7 @@ function PantriesDrawer(props) {
                         <Divider />
                     </ListItem>
                     <ListItem>
-                        <Link >+ Create New Pantry</Link>
+                        <Link to='/additem'>+ Create New Pantry</Link>
                     </ListItem>
                 </List>
                 :
@@ -74,7 +78,7 @@ function PantriesDrawer(props) {
                         <Divider />
                     </ListItem>
                     <ListItem>
-                        <Link onClick={onClick}>+ Create New Pantry</Link>
+                        <Link to='/additem'>+ Create New Pantry</Link>
                     </ListItem>
                 </List>
             }

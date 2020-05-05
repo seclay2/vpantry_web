@@ -6,6 +6,7 @@ import {
 
 export const fetchPantryItems = group_id => dispatch => {
     const url = 'https://vpantryapi.herokuapp.com/items?group_id='+group_id;
+
     fetch(url , {
         method: 'GET',
         headers: {
@@ -33,7 +34,6 @@ export const fetchPantryItems = group_id => dispatch => {
 };
 
 export const createItem = item => dispatch => {
-    //TODO createItem
     fetch('https://vpantryapi.herokuapp.com/items', {
         method: 'POST',
         headers: {
@@ -44,11 +44,15 @@ export const createItem = item => dispatch => {
     })
         .then(res => res.json())
         .then(res => {
+            console.log(res);
             if (res.success) {
                 dispatch({
                     type: CREATE_ITEM,
                     payload: item
                 })
+            }
+            else {
+                console.log(res.message);
             }
         })
         .catch(error => console.log('error', error));
@@ -56,6 +60,7 @@ export const createItem = item => dispatch => {
 };
 
 export const updateItem = item => dispatch => {
+    console.log(JSON.stringify(item));
     fetch('https://vpantryapi.herokuapp.com/items', {
         method: 'PUT',
         headers: {
@@ -66,6 +71,7 @@ export const updateItem = item => dispatch => {
     })
         .then(res => res.json())
         .then(res => {
+            console.log(res);
             if (res.success) {
                 dispatch({
                     type: UPDATE_ITEM,
@@ -77,13 +83,12 @@ export const updateItem = item => dispatch => {
 };
 
 export const deleteItem = item_id => dispatch => {
-    fetch('https://vpantryapi.herokuapp.com/items', {
+    fetch('https://vpantryapi.herokuapp.com/items?' + item_id, {
         method: 'DELETE',
         headers: {
             'content-type': 'application/json',
             'token': sessionStorage.getItem('jwtToken')
-        },
-        body: JSON.stringify(item_id)
+        }
     })
         .then(res => res.json())
         .then(res => {

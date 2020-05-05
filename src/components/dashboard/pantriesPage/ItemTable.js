@@ -1,78 +1,8 @@
-// import React, {Component} from 'react';
-// import { connect } from 'react-redux';
-// import PropTypes from 'prop-types';
-// import { fetchPantryItems} from "../../actions/itemsActions";
-//
-// // material-ui
-// import clsx from 'clsx';
-// import { lighten, makeStyles } from '@material-ui/core/styles';
-// import Table from '@material-ui/core/Table';
-// import TableBody from '@material-ui/core/TableBody';
-// import TableCell from '@material-ui/core/TableCell';
-// import TableContainer from '@material-ui/core/TableContainer';
-// import TableHead from '@material-ui/core/TableHead';
-// import TablePagination from '@material-ui/core/TablePagination';
-// import TableRow from '@material-ui/core/TableRow';
-// import TableSortLabel from '@material-ui/core/TableSortLabel';
-// import Toolbar from '@material-ui/core/Toolbar';
-// import Typography from '@material-ui/core/Typography';
-// import Paper from '@material-ui/core/Paper';
-// import Checkbox from '@material-ui/core/Checkbox';
-// import IconButton from '@material-ui/core/IconButton';
-// import Tooltip from '@material-ui/core/Tooltip';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Switch from '@material-ui/core/Switch';
-// import DeleteIcon from '@material-ui/icons/Delete';
-// import FilterListIcon from '@material-ui/icons/FilterList';
-//
-// class ItemTable extends Component {
-//     constructor(props) {
-//         super(props);
-//
-//         this.onClick = this.onClick.bind(this);
-//     }
-//
-//     componentWillMount() {
-//         this.props.fetchPantryItems(this.props.pantry.activePantry)
-//     }
-//
-//
-//
-//     useStyles = makeStyles((theme) => ({
-//         seeMore: {
-//             marginTop: theme.spacing(3),
-//         },
-//     }));
-//
-//     render() {
-//
-//
-//         return (
-//
-//         );
-//     }
-// }
-//
-// ItemTable.propTypes = {
-//     items: PropTypes.array.isRequired,
-//     user: PropTypes.object
-// };
-//
-// const mapStateToProps = state => ({
-//     items: state.items.itemList,
-//     pantry: state.pantry
-// });
-//
-// export default connect(mapStateToProps, { fetchPantryItems })(ItemTable);
-
-
-//--------------------------------------------------------------------------------------
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from "react-redux";
 import {fetchPantryItems} from "../../../actions/itemsActions";
-import clsx from 'clsx';
-import { lighten, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -81,16 +11,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 
 import EnhancedTableToolbar from '../../common/table/EnhancedTableToolbar';
 
@@ -125,7 +49,7 @@ const headCells = [
     { id: 'name', numeric: false, disablePadding: true, label: 'Item' },
     { id: 'type', numeric: false, disablePadding: false, label: 'Type' },
     { id: 'location', numeric: false, disablePadding: false, label: 'Location' },
-    { id: 'expirationDate', numeric: true, disablePadding: false, label: 'Exp. Date' },
+    { id: 'expirationDate', numeric: false, disablePadding: false, label: 'Exp. Date' },
     { id: 'owner', numeric: false, disablePadding: false, label: 'Owner' },
     { id: 'note', numeric: false, disablePadding: false, label: 'Note' },
 ];
@@ -248,12 +172,12 @@ function EnhancedTable(props) {
         setSelected([]);
     };
 
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
+    const handleClick = (event, id) => {
+        const selectedIndex = selected.indexOf(id);
         let newSelected = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -264,7 +188,6 @@ function EnhancedTable(props) {
                 selected.slice(selectedIndex + 1),
             );
         }
-
         setSelected(newSelected);
     };
 
@@ -288,7 +211,7 @@ function EnhancedTable(props) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} title='My Items'/>
+                <EnhancedTableToolbar numSelected={selected.length} items={selected} title='My Items'/>
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -309,17 +232,23 @@ function EnhancedTable(props) {
                             {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row._id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
+                                    let date = new Date();
+                                    date.setTime(row.expirationDate);
+                                    if (date.toDateString() === 'Invalid Date')
+                                        date = '';
+                                    else
+                                        date = date.toDateString()
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.name)}
+                                            onClick={(event) => handleClick(event, row._id)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.name}
+                                            key={row._id}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -333,7 +262,7 @@ function EnhancedTable(props) {
                                             </TableCell>
                                             <TableCell align="left">{row.type}</TableCell>
                                             <TableCell align="left">{row.location}</TableCell>
-                                            <TableCell align="left">{row.expirationDate}</TableCell>
+                                            <TableCell align="left">{date}</TableCell>
                                             <TableCell align="left">{row.owner.split('\n')[0]}</TableCell>
                                             <TableCell align="left">{row.note}</TableCell>
                                         </TableRow>

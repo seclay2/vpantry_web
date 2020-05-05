@@ -10,13 +10,15 @@ import Container from "@material-ui/core/Container";
 import Backdrop from "@material-ui/core/Backdrop";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
+import {Link} from 'react-router-dom'
 
 // Components
 import DashboardBar from "./DashboardBar";
 import ItemTable from "./pantriesPage/ItemTable";
 import PantriesDrawer from "./pantriesPage/pantriesDrawer";
 import GroupsTable from "./groupsPage/GroupsTable";
-import Divider from "@material-ui/core/Divider";
+import ProfilePage from "./ProfilePage";
 
 class Dashboard extends Component {
     constructor(props) {
@@ -57,11 +59,18 @@ class Dashboard extends Component {
 
     useStyles = makeStyles((theme) => ({
         root: {
-            width: '90%'
+            width: '90%',
+            display: 'flex'
         },
         backdrop: {
             zIndex: 4800,
             color: '#fff'
+        },
+        content: {
+            flexGrow: 1,
+            backgroundColor: theme.palette.background.default,
+            padding: theme.spacing(3),
+            marginLeft: '240px'
         }
     }));
 
@@ -76,26 +85,34 @@ class Dashboard extends Component {
                     <CircularProgress color="inherit" />
                 </Backdrop>
                 {this.state.dataReady &&
-                    <Container fixed style={{paddingTop: 24}}>
-                        <Typography variant="h6" noWrap>
-                            Hello, {user.given_name}
-                        </Typography>
-                        <hr/>
-                        {this.state.activeView === 'MY_PANTRIES' &&
-                        <div>
-                            <PantriesDrawer/>
-                            {this.state.itemsExist ? <ItemTable/> : <h2>No items</h2>}
-                        </div>
-                        }
-                        {this.state.activeView === 'MY_GROUPS' &&
-                        <div>
-                            <GroupsTable />
-                        </div>
-                        }
-                        {this.state.activeView === 'MY_PROFILE' &&
-                        <h2>MY PROFILE PAGE</h2>
-                        }
-                    </Container>
+                    <div>
+                        <Container fixed style={{paddingTop: 24}} >
+                            <Typography variant="h6" noWrap>
+                                Hello, {user.given_name}
+                            </Typography>
+                            <hr/>
+                            {this.state.activeView === 'MY_PANTRIES' &&
+                                <main className={classes.content}>
+                                    <PantriesDrawer />
+                                    <Button component={Link}
+                                            to={'/additem'}
+                                            variant="contained"
+                                            color="primary" >
+                                        Add Item
+                                    </Button>
+                                    {this.state.itemsExist ? <ItemTable/> : <h2>No items</h2>}
+                                </main>
+                            }
+                            {this.state.activeView === 'MY_GROUPS' &&
+                            <div>
+                                <GroupsTable />
+                            </div>
+                            }
+                            {this.state.activeView === 'MY_PROFILE' &&
+                            <ProfilePage />
+                            }
+                        </Container>
+                    </div>
                 }
             </div>
         );

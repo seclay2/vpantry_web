@@ -32,7 +32,6 @@ class Landing extends Component {
         return (
             <div>
                 <LandingBar />
-                <br />
                 <LandingCard />
                 <Footer />
             </div>

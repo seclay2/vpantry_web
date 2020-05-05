@@ -190,12 +190,6 @@ class RegisterForm extends Component {
                                         value={this.state.password2}
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <FormControlLabel
-                                        control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                        label="I would like to receive vPantry news and offers"
-                                    />
-                                </Grid>
                             </Grid>
                             <br />
                             <Button
